@@ -10,6 +10,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+
 /** Send Custom SMS */
 app.post('/sendsms', (req, res) => {
     const phoneNumber = req.body.phoneNumber;
@@ -29,6 +31,21 @@ app.post('/sendsms', (req, res) => {
         }
     })
 });
+
+/** Get All Sent SMS by limit Number */
+app.get('/getsms', (req, res) => {
+    twilioClient.messages.list({limit: 50},function(error, messages){
+        if(error) {
+            res.json({ error: error.message})
+        } else {
+            res.json({ data: messages})                    
+        }
+    });
+})
+
+/** Delete All Older Twilio SMS */
+//twilioClient.messages.each(messages => messages.remove().then().done());
+
 
 /** TODO: Send SMS with CRON JOB everyday at 1200 HRS */
 
