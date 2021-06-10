@@ -11,7 +11,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
-
 /** Send Custom SMS */
 app.post('/sendsms', (req, res) => {
     const phoneNumber = req.body.phoneNumber;
@@ -71,6 +70,15 @@ var everyday = schedule.scheduleJob({ hour: 12, minute: 00 }, function() {
         }
     })
 });
+
+/** Make Twilio Call */
+twilioClient.calls
+  .create({
+    from: process.env.NUMBER,
+    to: process.env.TO_NUMBER,     
+    url: 'https://handler.twilio.com/twiml/ml_number' // Twilio ML Bin
+  })
+  .then(call => console.log(call.sid));
 
 
 
